@@ -211,6 +211,9 @@ var createArray = function(str)
 // 17. Reverse the order of an array
 var reverseArr = function(array)
 {
+	if (array.length === 0) return [];
+
+	return [array[array.length - 1]].concat(reverseArr(array.slice(0, -1)));
 };
 
 // 18. Create a new array with a given value and length.
@@ -218,6 +221,9 @@ var reverseArr = function(array)
 // buildList(7,3) // [7,7,7]
 var buildList = function(value, length)
 {
+	if (length === 0) return [];
+
+	return [value].concat(buildList(value, length - 1));
 };
 
 // 19. Implement FizzBuzz. Given integer n, return an array of the string representations of 1 to n.
@@ -227,6 +233,10 @@ var buildList = function(value, length)
 // fizzBuzz(5) // ['1','2','Fizz','4','Buzz']
 var fizzBuzz = function(n)
 {
+	if (n === 0) return [];
+
+	let value = n % 15 === 0 ? 'FizzBuzz' : n % 5 === 0 ? 'Buzz' : n % 3 === 0 ? 'Fizz' : n.toString();
+	return fizzBuzz(n - 1).concat([value]);
 };
 
 // 20. Count the occurence of a value in a list.
@@ -234,6 +244,10 @@ var fizzBuzz = function(n)
 // countOccurrence([2,'banana',4,4,1,'banana'], 'banana') // 2
 var countOccurrence = function(array, value)
 {
+	if (array.length === 0) return 0;
+
+	let count = array[0] === value ? 1 : 0;
+	return count + countOccurrence(array.slice(1), value);
 };
 
 // 21. Write a recursive version of map.
