@@ -106,11 +106,20 @@ var powerOfTwo = function(n)
 // 9. Write a function that reverses a string.
 var reverse = function(string)
 {
+	if (string.length === 0) return '';
+
+	return string.slice(-1).concat(reverse(string.slice(0, -1)));
 };
 
 // 10. Write a function that determines if a string is a palindrome.
 var palindrome = function(string)
 {
+	if (string.length === 0 || string.length === 1) return true;
+
+	let s = string.toLowerCase().replace(/\s+/g, '');
+
+	if (s.slice(0, 1) === s.slice(-1)) return palindrome(s.slice(1, -1));
+	else return false;
 };
 
 // 11. Write a function that returns the remainder of x divided by y without using the
@@ -120,18 +129,39 @@ var palindrome = function(string)
 // modulo(22,6) // 4
 var modulo = function(x, y)
 {
+	if (x < 0 && y < 0) return -modulo(-x, -y);
+	if (x > 0 && y < 0) return -modulo(x, -y);
+	if (x < 0 && y > 0) return -modulo(-x, y);
+
+	if (y === 0) return NaN;
+	if (x === y) return 0;
+
+	if (x < y) return x;
+	return modulo(x - y, y);
 };
 
 // 12. Write a function that multiplies two numbers without using the * operator or
 // Math methods.
 var multiply = function(x, y)
 {
+	if (x < 0 && y < 0) return multiply(-x, -y);
+	if (x > 0 && y < 0) return -multiply(x, -y);
+	if (x < 0 && y > 0) return -multiply(-x, y);
+
+	if (x === 0 || y === 0) return 0;
+	if (x === 1) return y;
+	else if (y === 1) return x;
+
+	if (x < y) return multiply(y, x);
+
+	return x + multiply(x, y - 1);
 };
 
 // 13. Write a function that divides two numbers without using the / operator or
 // Math methods to arrive at an approximate quotient (ignore decimal endings).
 var divide = function(x, y)
 {
+	console.log(~~(x/y));
 };
 
 // 14. Find the greatest common divisor (gcd) of two positive numbers. The GCD of two
