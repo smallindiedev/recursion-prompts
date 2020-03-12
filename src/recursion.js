@@ -404,7 +404,7 @@ var flatten = function(array)
 // letterTally('potato'); // {p:1, o:2, t:2, a:1}
 var letterTally = function(str, obj)
 {
-	obj = obj || { };
+	obj = obj || {};
 	if (str.length === 0) return obj;
 
 	let letter = str[0];
@@ -491,7 +491,7 @@ var numToText = function(str)
 	let convertToText =
 	{
 		0: 'zero', 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine'
-	}
+	};
 
 	if (str[0] === ' ' || isNaN(str[0])) return str[0] + numToText(str.slice(1));
 	return convertToText[str[0]] + numToText(str.slice(1));
@@ -503,6 +503,16 @@ var numToText = function(str)
 // 37. Return the number of times a tag occurs in the DOM.
 var tagCount = function(tag, node)
 {
+	let count = 0;
+	node = node || document.body;
+
+	for (let child of node.children)
+	{
+		if (child.tagName.toLowerCase() === tag.toLowerCase()) count++;
+		if (child.children) count += tagCount(tag, child);
+	}
+
+	return count;
 };
 
 // 38. Write a function for binary search.
@@ -511,6 +521,23 @@ var tagCount = function(tag, node)
 // https://www.khanacademy.org/computing/computer-science/algorithms/binary-search/a/binary-search
 var binarySearch = function(array, target, min, max)
 {
+	min = min || 0;
+	max = max || array.length;
+
+	let guess = Math.floor((min + max) / 2);
+
+	if (array[guess] === target) return guess;
+	if (max - min === 1) return null;
+
+	if (array[guess] < target)
+	{
+		return binarySearch(array, target, guess, max);
+	}
+
+	if (array[guess] > target)
+	{
+		return binarySearch(array, target, min, guess);
+	}
 };
 
 // 39. Write a merge sort function.
@@ -518,6 +545,19 @@ var binarySearch = function(array, target, min, max)
 // https://www.khanacademy.org/computing/computer-science/algorithms/merge-sort/a/divide-and-conquer-algorithms
 var mergeSort = function(array)
 {
+	if (array.length < 2) return array;
+
+	let mid = Math.floor(array.length / 2);
+	let sub1 = mergeSort(array.slice(0, mid));
+	let sub2 = mergeSort(array.slice(mid, array.length));
+
+	let merged = [];
+	while (sub1.length > 0 && sub2.length > 0)
+	{
+		if (sub1[0] < sub2[0]) merged.push(sub1.shift());
+		else merged.push(sub2.shift());
+	}
+	return merged.concat(sub1).concat(sub2);
 };
 
 // 40. Deeply clone objects and arrays.
@@ -527,4 +567,13 @@ var mergeSort = function(array)
 // obj1 === obj2 // false
 var clone = function(input)
 {
+	let result = Array.isArray(input) ? [] : {};
+
+	for (let [k, v] of Object.entries(input))
+	{
+		if (Array.isArray(v) || typeof v === 'object') result[k] = clone(v);
+		else result[k] = v;
+	}
+
+	return result;
 };
