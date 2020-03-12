@@ -441,6 +441,12 @@ var compress = function(list)
 // augmentElements([[],[3],[7]], 5); // [[5],[3,5],[7,5]]
 var augmentElements = function(array, aug)
 {
+	if (array.length === 0) return [];
+
+	let copy = array[0];
+	copy.push(aug);
+
+	return [copy].concat(augmentElements(array.slice(1), aug));
 };
 
 // 34. Reduce a series of zeroes to a single 0.
@@ -448,6 +454,16 @@ var augmentElements = function(array, aug)
 // minimizeZeroes([2,0,0,0,1,0,0,4]) // [2,0,1,0,4]
 var minimizeZeroes = function(array)
 {
+	if (array.length === 0) return [];
+
+	let copy = array.slice();
+
+	while (copy[0] === 0 && copy[1] === 0)
+	{
+		copy.shift();
+	}
+
+	return [copy[0]].concat(minimizeZeroes(copy.slice(1)));
 };
 
 // 35. Alternate the numbers in an array between positive and negative regardless of
@@ -456,6 +472,13 @@ var minimizeZeroes = function(array)
 // alternateSign([-2,-7,8,3,-1,4]) // [2,-7,8,-3,1,-4]
 var alternateSign = function(array)
 {
+	if (array.length === 0) return [];
+
+	let current = array[array.length - 1];
+	let sign = array.length % 2 === 0 ? -1 : 1;
+	let signed = sign * current * Math.sign(current);
+
+	return alternateSign(array.slice(0, -1)).concat([signed]);
 };
 
 // 36. Given a string, return a string with digits converted to their word equivalent.
@@ -463,6 +486,15 @@ var alternateSign = function(array)
 // numToText("I have 5 dogs and 6 ponies"); // "I have five dogs and six ponies"
 var numToText = function(str)
 {
+	if (str.length === 0) return '';
+
+	let convertToText =
+	{
+		0: 'zero', 1: 'one', 2: 'two', 3: 'three', 4: 'four', 5: 'five', 6: 'six', 7: 'seven', 8: 'eight', 9: 'nine'
+	}
+
+	if (str[0] === ' ' || isNaN(str[0])) return str[0] + numToText(str.slice(1));
+	return convertToText[str[0]] + numToText(str.slice(1));
 };
 
 
